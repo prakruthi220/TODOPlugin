@@ -1,0 +1,56 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>com.abcd.TODOPlugin</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>TODOPlugin</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor url="https://www.abcd.com">abcd</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description><![CDATA[
+    Parse the kotlin file.<br>
+    <em>And list the TODO Comments</em>
+  ]]></description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>org.jetbrains.kotlin</depends>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="KotlinTODOs"
+                    secondary="true"
+                    anchor="right"
+                    factoryClass="com.abcd.todoplugin.KotlinTodoToolWindowFactory"/>
+
+        <!-- Annotator for highlighting -->
+        <annotator language="kotlin"
+                   implementationClass="com.abcd.todoplugin.KotlinTodoAnnotator"/>
+
+        <!-- Application service for persistence -->
+        <applicationService serviceImplementation="com.abcd.todoplugin.KotlinTodoState"/>
+    </extensions>
+
+    <applicationListeners>
+        <listener class="com.abcd.todoplugin.KotlinTodoFileListener"
+                  topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
+    </applicationListeners>
+
+    <actions>
+        <!-- Optional: Add menu action to show tool window -->
+        <action id="ShowKotlinTodos"
+                class="com.abcd.todoplugin.ShowTodoAction"
+                text="Show Kotlin TODOs"
+                description="Show the Kotlin TODO scanner panel">
+            <add-to-group group-id="ViewMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>
+
